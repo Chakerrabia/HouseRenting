@@ -51,10 +51,13 @@ class RegistrationController extends AbstractFOSRestController
         ]);
 
         if (!is_null($user)) {
-            $view =$this->view([
+            /*$view =$this->view([
                 'message' => 'User already exists'
             ], Response::HTTP_CONFLICT);
-            return this.$this->handleView($view);
+            return this.$this->handleView($view);*/
+            return $this->json([
+                'message' => 'User already exists'
+            ], Response::HTTP_CONFLICT);
         }
 
         $user = new User();
@@ -66,7 +69,7 @@ class RegistrationController extends AbstractFOSRestController
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-        $view = $this->view($user, Response::HTTP_CREATED)->setContext((new Context())->setGroups(['public']));
-        return $this.$this->handleView($view);
+        /*$view = $this->view($user, Response::HTTP_CREATED)->setContext((new Context())->setGroups(['public']));
+        return $this.$this->handleView($view);*/
     }
 }
