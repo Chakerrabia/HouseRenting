@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\GarageRepository;
 use App\Traits\TimestampTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,9 +34,21 @@ class Garage extends Logement
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Photo::class, inversedBy="garage")
+     * @ORM\OneToMany(targetEntity=Photo::class, mappedBy="garage")
      */
     private $photo;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Commentaire::class, mappedBy="garage")
+     */
+    private $commentaire;
+
+    public function __construct()
+    {
+        $this->photo = new ArrayCollection();
+        $this->commentaire = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -65,15 +79,64 @@ class Garage extends Logement
         return $this;
     }
 
-    public function getPhoto(): ?Photo
+    /**
+     * @return Collection|Photo[]
+     */
+    public function getPhoto(): Collection
     {
         return $this->photo;
     }
 
-    public function setPhoto(?Photo $photo): self
+    public function addPhoto(Photo $photo): self
     {
-        $this->photo = $photo;
+        if (!$this->photo->contains($photo)) {
+            $this->photo[] = $photo;
+            $photo->setGarage($this);
+        }
 
         return $this;
     }
+
+    public function removePhoto(Photo $photo): self
+    {
+        if ($this->photo->removeElement($photo)) {
+            // set the owning side to null (unless already changed)
+            if ($photo->getGarage() === $this) {
+                $photo->setGarage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commentaire[]
+     */
+    public function getCommentaire(): Collection
+    {
+        return $this->commentaire;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): self
+    {
+        if (!$this->commentaire->contains($commentaire)) {
+            $this->commentaire[] = $commentaire;
+            $commentaire->setGarage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): self
+    {
+        if ($this->commentaire->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getGarage() === $this) {
+                $commentaire->setGarage(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
