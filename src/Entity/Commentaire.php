@@ -3,20 +3,17 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\PhotoRepository;
+use App\Repository\CommentaireRepository;
 use App\Traits\TimestampTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=PhotoRepository::class)
- * @Vich\Uploadable()
+ * @ORM\Entity(repositoryClass=CommentaireRepository::class)
  */
-class Photo
+class Commentaire
 {
     use TimestampTrait;
     /**
@@ -27,75 +24,48 @@ class Photo
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
-    private $image;
-    /**
-     * @Vich\UploadableField(mapping="post_images", fileNameProperty="image")
-     * @var File
-     */
-    private $imageFile;
+    private $comm;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Appartement::class, inversedBy="photo")
+     * @ORM\ManyToOne(targetEntity=Appartement::class, inversedBy="commentaire")
      */
     private $appartement;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Garage::class, inversedBy="photo")
+     * @ORM\ManyToOne(targetEntity=Garage::class, inversedBy="commentaire")
      */
     private $garage;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Maison::class, inversedBy="photo")
+     * @ORM\ManyToOne(targetEntity=Maison::class, inversedBy="commentaire")
      */
     private $maison;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Studio::class, inversedBy="photo")
+     * @ORM\ManyToOne(targetEntity=Studio::class, inversedBy="commentaire")
      */
     private $studio;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Terrain::class, inversedBy="photo")
+     * @ORM\ManyToOne(targetEntity=Terrain::class, inversedBy="commentaire")
      */
     private $terrain;
-
-    /**
-     * @return mixed
-     */
-    public function getImageFile()
-    {
-        return $this->imageFile;
-    }
-
-    /**
-     * @param mixed $imageFile
-     * @throws \Exception
-     */
-    public function setImageFile(File $imageFile)
-    {
-        $this->imageFile = $imageFile;
-        if ($imageFile){
-            $this->updatedAt= new \DateTime();
-        }
-
-    }
-
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getImage(): ?string
+    public function getComm(): ?string
     {
-        return $this->image;
+        return $this->comm;
     }
 
-    public function setImage(?string $image): self
+    public function setComm(?string $comm): self
     {
-        $this->image = $image;
+        $this->comm = $comm;
 
         return $this;
     }

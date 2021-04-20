@@ -41,6 +41,7 @@ class Logement
 
 
 
+
 //    /**
 //     * @ORM\OneToMany(targetEntity=categorie::class, mappedBy="lo")
 //     */
@@ -146,4 +147,6 @@ class Logement
 //
 //        return $this;
 //    }
+
+
 }
