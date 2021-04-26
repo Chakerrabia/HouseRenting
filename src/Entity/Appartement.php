@@ -16,12 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Appartement extends Logement
 {
     use TimestampTrait;
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -48,15 +43,23 @@ class Appartement extends Logement
      */
     private $commentaire;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Contrat::class, mappedBy="appartement")
+     */
+    private $contrats;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Proprietaire::class, inversedBy="appartements")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $proprietaire;
+
+
     public function __construct()
     {
         $this->photo = new ArrayCollection();
         $this->commentaire = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
+        $this->contrats = new ArrayCollection();
     }
 
     public function getDescription(): ?string
@@ -151,6 +154,48 @@ class Appartement extends Logement
                 $commentaire->setAppartement(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Contrat[]
+     */
+    public function getContrats(): Collection
+    {
+        return $this->contrats;
+    }
+
+    public function addContrat(Contrat $contrat): self
+    {
+        if (!$this->contrats->contains($contrat)) {
+            $this->contrats[] = $contrat;
+            $contrat->setAppartement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContrat(Contrat $contrat): self
+    {
+        if ($this->contrats->removeElement($contrat)) {
+            // set the owning side to null (unless already changed)
+            if ($contrat->getAppartement() === $this) {
+                $contrat->setAppartement(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getProprietaire(): ?Proprietaire
+    {
+        return $this->proprietaire;
+    }
+
+    public function setProprietaire(?Proprietaire $proprietaire): self
+    {
+        $this->proprietaire = $proprietaire;
 
         return $this;
     }

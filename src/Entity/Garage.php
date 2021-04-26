@@ -16,12 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Garage extends Logement
 {
     use TimestampTrait;
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -43,17 +37,29 @@ class Garage extends Logement
      */
     private $commentaire;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Contrat::class, mappedBy="garage")
+     */
+    private $contrats;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Proprietaire::class, inversedBy="garages")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $proprietaire;
+
+
+
+
     public function __construct()
     {
         $this->photo = new ArrayCollection();
         $this->commentaire = new ArrayCollection();
+        $this->contrats = new ArrayCollection();
     }
 
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+
 
     public function getSurface(): ?float
     {
@@ -135,6 +141,48 @@ class Garage extends Logement
                 $commentaire->setGarage(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Contrat[]
+     */
+    public function getContrats(): Collection
+    {
+        return $this->contrats;
+    }
+
+    public function addContrat(Contrat $contrat): self
+    {
+        if (!$this->contrats->contains($contrat)) {
+            $this->contrats[] = $contrat;
+            $contrat->setGarage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContrat(Contrat $contrat): self
+    {
+        if ($this->contrats->removeElement($contrat)) {
+            // set the owning side to null (unless already changed)
+            if ($contrat->getGarage() === $this) {
+                $contrat->setGarage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getProprietaire(): ?Proprietaire
+    {
+        return $this->proprietaire;
+    }
+
+    public function setProprietaire(?Proprietaire $proprietaire): self
+    {
+        $this->proprietaire = $proprietaire;
 
         return $this;
     }
