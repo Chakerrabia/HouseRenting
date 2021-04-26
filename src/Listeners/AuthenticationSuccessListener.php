@@ -2,6 +2,8 @@
 
 namespace App\Listeners;
 
+use DateInterval;
+use DateTime;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Response\JWTAuthenticationSuccessResponse;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -33,8 +35,7 @@ class AuthenticationSuccessListener{
         unset($data['refresh_token']);
         $event->setData($data);
         $response->headers->setCookie(new Cookie('BEARER', $tokenJWT, (
-        new \DateTime())
-            ->add(new \DateInterval('PT' . $this->jwtTokenTTL . 'S'))
+        new DateTime())->add(new \DateInterval('PT' . 3600 . 'S'))
             , '/', null, $this->cookieSecure));
 
         return $response;

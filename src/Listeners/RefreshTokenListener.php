@@ -2,6 +2,8 @@
 
 namespace App\Listeners;
 
+use DateInterval;
+use DateTime;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -24,8 +26,8 @@ class RefreshTokenListener implements EventSubscriberInterface {
 
         if ($refreshToken) {
             $response->headers->setCookie(new Cookie('REFRESH_TOKEN', $refreshToken, (
-            new \DateTime())
-                ->add(new \DateInterval('PT' . $this->ttl . 'S')), '/', null, $this->cookieSecure));
+            new DateTime())
+                ->add(new DateInterval('PT' . 3600 . 'S')), '/', null, $this->cookieSecure));
         }
     }
 
