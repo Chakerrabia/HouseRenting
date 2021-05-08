@@ -22,6 +22,11 @@ class Test
      */
     private $test;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Participer::class, inversedBy="test")
+     */
+    private $participer;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -35,6 +40,18 @@ class Test
     public function setTest(string $test): self
     {
         $this->test = $test;
+
+        return $this;
+    }
+
+    public function getParticiper(): ?Participer
+    {
+        return $this->participer;
+    }
+
+    public function setParticiper(?Participer $participer): self
+    {
+        $this->participer = $participer;
 
         return $this;
     }

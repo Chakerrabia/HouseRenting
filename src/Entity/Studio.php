@@ -48,10 +48,16 @@ class Studio extends Logement
      */
     private $commentaire;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="studio")
+     */
+    private $ratings;
+
     public function __construct()
     {
         $this->photo = new ArrayCollection();
         $this->commentaire = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -149,6 +155,36 @@ class Studio extends Logement
             // set the owning side to null (unless already changed)
             if ($commentaire->getStudio() === $this) {
                 $commentaire->setStudio(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rating[]
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings[] = $rating;
+            $rating->setStudio($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getStudio() === $this) {
+                $rating->setStudio(null);
             }
         }
 

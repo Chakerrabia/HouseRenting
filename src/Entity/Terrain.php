@@ -38,10 +38,16 @@ class Terrain extends Logement
      */
     private $commentaire;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="terrain")
+     */
+    private $ratings;
+
     public function __construct()
     {
         $this->photo = new ArrayCollection();
         $this->commentaire = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,6 +121,36 @@ class Terrain extends Logement
             // set the owning side to null (unless already changed)
             if ($commentaire->getTerrain() === $this) {
                 $commentaire->setTerrain(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rating[]
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings[] = $rating;
+            $rating->setTerrain($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getTerrain() === $this) {
+                $rating->setTerrain(null);
             }
         }
 

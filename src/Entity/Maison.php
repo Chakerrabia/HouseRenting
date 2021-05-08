@@ -46,10 +46,16 @@ class Maison extends Logement
      */
     private $commentaire;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="maison")
+     */
+    private $ratings;
+
     public function __construct()
     {
         $this->photo = new ArrayCollection();
         $this->commentaire = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
 
@@ -148,6 +154,36 @@ class Maison extends Logement
             // set the owning side to null (unless already changed)
             if ($commentaire->getMaison() === $this) {
                 $commentaire->setMaison(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rating[]
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings[] = $rating;
+            $rating->setMaison($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getMaison() === $this) {
+                $rating->setMaison(null);
             }
         }
 

@@ -3,19 +3,15 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\CommentaireRepository;
-use App\Traits\TimestampTrait;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\RatingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=CommentaireRepository::class)
+ * @ORM\Entity(repositoryClass=RatingRepository::class)
  */
-class Commentaire
+class Rating
 {
-    use TimestampTrait;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -24,66 +20,60 @@ class Commentaire
     private $id;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
-    private $comm;
+    private $score;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Appartement::class, inversedBy="commentaire")
+     * @ORM\ManyToOne(targetEntity=Appartement::class, inversedBy="ratings")
      */
-    private $appartement;
+    private $appartmement;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Garage::class, inversedBy="commentaire")
+     * @ORM\ManyToOne(targetEntity=Garage::class, inversedBy="ratings")
      */
     private $garage;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Maison::class, inversedBy="commentaire")
+     * @ORM\ManyToOne(targetEntity=Maison::class, inversedBy="ratings")
      */
     private $maison;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Studio::class, inversedBy="commentaire")
+     * @ORM\ManyToOne(targetEntity=Studio::class, inversedBy="ratings")
      */
     private $studio;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Terrain::class, inversedBy="commentaire")
+     * @ORM\ManyToOne(targetEntity=Terrain::class, inversedBy="ratings")
      */
     private $terrain;
-
-    public function __construct()
-    {
-        $this->createdAt = new \DateTime();
-        $this->isDeleted = false;
-    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getComm(): ?string
+    public function getScore(): ?float
     {
-        return $this->comm;
+        return $this->score;
     }
 
-    public function setComm(?string $comm): self
+    public function setScore(?float $score): self
     {
-        $this->comm = $comm;
+        $this->score = $score;
 
         return $this;
     }
 
-    public function getAppartement(): ?Appartement
+    public function getAppartmement(): ?Appartement
     {
-        return $this->appartement;
+        return $this->appartmement;
     }
 
-    public function setAppartement(?Appartement $appartement): self
+    public function setAppartmement(?Appartement $appartmement): self
     {
-        $this->appartement = $appartement;
+        $this->appartmement = $appartmement;
 
         return $this;
     }
@@ -135,5 +125,4 @@ class Commentaire
 
         return $this;
     }
-
 }
