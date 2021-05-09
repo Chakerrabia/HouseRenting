@@ -24,6 +24,10 @@ security:
             pattern: ^/api/register
             stateless: true
             anonymous: true
+        refresh:
+            pattern: ^/api/token/refresh
+            stateless: true
+            anonymous: true
         api:
             pattern: ^/api
             stateless: true
@@ -34,10 +38,7 @@ security:
                 path: app_logout
                 # where to redirect after logout
                 # target: app_any_route
-        refresh:
-            pattern: ^/api/token/refresh
-            stateless: true
-            anonymous: true
+
         main:
             anonymous: true
 

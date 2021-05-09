@@ -16,12 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Terrain extends Logement
 {
     use TimestampTrait;
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -42,18 +37,28 @@ class Terrain extends Logement
      * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="terrain")
      */
     private $ratings;
+    /**
+     * @ORM\OneToMany(targetEntity=Contrat::class, mappedBy="terrain")
+     */
+    private $contrats;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Proprietaire::class, inversedBy="terrains")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $proprietaire;
+
+
 
     public function __construct()
     {
         $this->photo = new ArrayCollection();
         $this->commentaire = new ArrayCollection();
         $this->ratings = new ArrayCollection();
+        $this->contrats = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+
 
     public function getSurface(): ?float
     {
@@ -141,6 +146,21 @@ class Terrain extends Logement
             $this->ratings[] = $rating;
             $rating->setTerrain($this);
         }
+    }
+    
+     * @return Collection|Contrat[]
+     */
+    public function getContrats(): Collection
+    {
+        return $this->contrats;
+    }
+
+    public function addContrat(Contrat $contrat): self
+    {
+        if (!$this->contrats->contains($contrat)) {
+            $this->contrats[] = $contrat;
+            $contrat->setTerrain($this);
+        }
 
         return $this;
     }
@@ -153,6 +173,27 @@ class Terrain extends Logement
                 $rating->setTerrain(null);
             }
         }
+    }
+    public function removeContrat(Contrat $contrat): self
+    {
+        if ($this->contrats->removeElement($contrat)) {
+            // set the owning side to null (unless already changed)
+            if ($contrat->getTerrain() === $this) {
+                $contrat->setTerrain(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getProprietaire(): ?Proprietaire
+    {
+        return $this->proprietaire;
+    }
+
+    public function setProprietaire(?Proprietaire $proprietaire): self
+    {
+        $this->proprietaire = $proprietaire;
 
         return $this;
     }

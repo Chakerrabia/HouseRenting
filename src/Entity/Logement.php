@@ -13,31 +13,45 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Logement
 {
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private $num;
+    protected $num;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $statut;
+    protected $statut;
 
     /**
      * @ORM\Column(type="string", length=30, nullable=true)
      */
-    private $etat;
+    protected $etat;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $prixAchat;
+    protected $prixAchat;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $prixLocation;
+    protected $prixLocation;
+
+
+
+    public function __construct()
+    {
+        $this->contrats = new ArrayCollection();
+
+    }
 
 
 
@@ -147,6 +161,10 @@ class Logement
 //
 //        return $this;
 //    }
+
+
+
+
 
 
 }

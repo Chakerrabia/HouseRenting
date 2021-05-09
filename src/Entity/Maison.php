@@ -7,19 +7,16 @@ use App\Traits\TimestampTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=MaisonRepository::class)
  */
 class Maison extends Logement
 {
     use TimestampTrait;
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -50,19 +47,28 @@ class Maison extends Logement
      * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="maison")
      */
     private $ratings;
+    /**
+     * @ORM\OneToMany(targetEntity=Contrat::class, mappedBy="maison")
+     */
+    private $contrats;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Proprietaire::class, inversedBy="maisons")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $proprietaire;
+
 
     public function __construct()
     {
         $this->photo = new ArrayCollection();
         $this->commentaire = new ArrayCollection();
         $this->ratings = new ArrayCollection();
+        $this->contrats = new ArrayCollection();
     }
 
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+
 
     public function getDescription(): ?string
     {
@@ -173,6 +179,18 @@ class Maison extends Logement
         if (!$this->ratings->contains($rating)) {
             $this->ratings[] = $rating;
             $rating->setMaison($this);
+     * @return Collection|Contrat[]
+     */
+    public function getContrats(): Collection
+    {
+        return $this->contrats;
+    }
+
+    public function addContrat(Contrat $contrat): self
+    {
+        if (!$this->contrats->contains($contrat)) {
+            $this->contrats[] = $contrat;
+            $contrat->setMaison($this);
         }
 
         return $this;
@@ -184,8 +202,26 @@ class Maison extends Logement
             // set the owning side to null (unless already changed)
             if ($rating->getMaison() === $this) {
                 $rating->setMaison(null);
+    public function removeContrat(Contrat $contrat): self
+    {
+        if ($this->contrats->removeElement($contrat)) {
+            // set the owning side to null (unless already changed)
+            if ($contrat->getMaison() === $this) {
+                $contrat->setMaison(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProprietaire(): ?Proprietaire
+    {
+        return $this->proprietaire;
+    }
+
+    public function setProprietaire(?Proprietaire $proprietaire): self
+    {
+        $this->proprietaire = $proprietaire;
 
         return $this;
     }
