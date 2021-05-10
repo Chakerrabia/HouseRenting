@@ -44,6 +44,10 @@ class Studio extends Logement
     private $commentaire;
 
     /**
+     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="studio")
+     */
+    private $ratings;
+    /**
      * @ORM\OneToMany(targetEntity=Contrat::class, mappedBy="studio")
      */
     private $contrats;
@@ -60,6 +64,7 @@ class Studio extends Logement
     {
         $this->photo = new ArrayCollection();
         $this->commentaire = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
         $this->contrats = new ArrayCollection();
     }
 
@@ -162,6 +167,18 @@ class Studio extends Logement
     }
 
     /**
+     * @return Collection|Rating[]
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings[] = $rating;
+            $rating->setStudio($this);
      * @return Collection|Contrat[]
      */
     public function getContrats(): Collection
@@ -179,6 +196,15 @@ class Studio extends Logement
         return $this;
     }
 
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getStudio() === $this) {
+                $rating->setStudio(null);
+            }
+        }
+    }
     public function removeContrat(Contrat $contrat): self
     {
         if ($this->contrats->removeElement($contrat)) {

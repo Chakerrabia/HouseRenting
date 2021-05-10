@@ -44,6 +44,10 @@ class Appartement extends Logement
     private $commentaire;
 
     /**
+     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="appartmement")
+     */
+    private $ratings;
+    /**
      * @ORM\OneToMany(targetEntity=Contrat::class, mappedBy="appartement")
      */
     private $contrats;
@@ -59,7 +63,13 @@ class Appartement extends Logement
     {
         $this->photo = new ArrayCollection();
         $this->commentaire = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
         $this->contrats = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getDescription(): ?string
@@ -159,6 +169,18 @@ class Appartement extends Logement
     }
 
     /**
+     * @return Collection|Rating[]
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings[] = $rating;
+            $rating->setAppartmement($this);
      * @return Collection|Contrat[]
      */
     public function getContrats(): Collection
@@ -176,6 +198,16 @@ class Appartement extends Logement
         return $this;
     }
 
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getAppartmement() === $this) {
+                $rating->setAppartmement(null);
+            }
+        }
+    }
+    
     public function removeContrat(Contrat $contrat): self
     {
         if ($this->contrats->removeElement($contrat)) {

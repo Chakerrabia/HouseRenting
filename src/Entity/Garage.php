@@ -38,6 +38,10 @@ class Garage extends Logement
     private $commentaire;
 
     /**
+     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="garage")
+     */
+    private $ratings;
+    /**
      * @ORM\OneToMany(targetEntity=Contrat::class, mappedBy="garage")
      */
     private $contrats;
@@ -55,6 +59,7 @@ class Garage extends Logement
     {
         $this->photo = new ArrayCollection();
         $this->commentaire = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
         $this->contrats = new ArrayCollection();
     }
 
@@ -146,6 +151,21 @@ class Garage extends Logement
     }
 
     /**
+     * @return Collection|Rating[]
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings[] = $rating;
+            $rating->setGarage($this);
+        }
+    }
+    /**
      * @return Collection|Contrat[]
      */
     public function getContrats(): Collection
@@ -163,6 +183,12 @@ class Garage extends Logement
         return $this;
     }
 
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getGarage() === $this) {
+                $rating->setGarage(null);
     public function removeContrat(Contrat $contrat): self
     {
         if ($this->contrats->removeElement($contrat)) {
