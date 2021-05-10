@@ -179,6 +179,9 @@ class Studio extends Logement
         if (!$this->ratings->contains($rating)) {
             $this->ratings[] = $rating;
             $rating->setStudio($this);
+        }
+    }
+    /**
      * @return Collection|Contrat[]
      */
     public function getContrats(): Collection
@@ -204,6 +207,7 @@ class Studio extends Logement
                 $rating->setStudio(null);
             }
         }
+        return $this;
     }
     public function removeContrat(Contrat $contrat): self
     {

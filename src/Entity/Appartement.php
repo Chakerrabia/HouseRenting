@@ -181,6 +181,10 @@ class Appartement extends Logement
         if (!$this->ratings->contains($rating)) {
             $this->ratings[] = $rating;
             $rating->setAppartmement($this);
+        }
+    }
+
+    /**
      * @return Collection|Contrat[]
      */
     public function getContrats(): Collection
