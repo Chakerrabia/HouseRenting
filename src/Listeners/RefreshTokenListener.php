@@ -27,7 +27,7 @@ class RefreshTokenListener implements EventSubscriberInterface {
         if ($refreshToken) {
             $response->headers->setCookie(new Cookie('REFRESH_TOKEN', $refreshToken, (
             new DateTime())
-                ->add(new DateInterval('PT' . 3600 . 'S')), '/', null, $this->cookieSecure));
+                ->add(new DateInterval('PT' . $this->ttl . 'S')), '/', null, $this->cookieSecure));
         }
     }
 

@@ -45,15 +45,16 @@ class RegistrationController extends AbstractFOSRestController
     }
 
     /**
-     * @Route("/api/register", name="api_register")
+     * @Route("/api/register", name="api_register", methods={"POST"})
      */
-    public function index(Request $request)
+    public function index(Request $request,\Swift_Mailer $mailer)
     {
         $data = json_decode($request->getContent(), true);
 
         $username = $data["username"];
         $password = $data["password"];
         $type = $data["type"];
+        $email = $data["email"];
         $nom = $data["nom"];
         $prenom = $data["prenom"];
         $cin = $data["cin"];
@@ -81,6 +82,7 @@ class RegistrationController extends AbstractFOSRestController
             $client->setNom($nom);
             $client->setPrenom($prenom);
             $client->setCin($cin);
+            $client->setEmail($email);
             $client->setUserInstance($user);
             $this->entityManager->persist($user);
             $this->entityManager->persist($client);
@@ -92,11 +94,22 @@ class RegistrationController extends AbstractFOSRestController
             $proprietaire->setNom($nom);
             $proprietaire->setPrenom($prenom);
             $proprietaire->setCin($cin);
+            $proprietaire->setEmail($email);
             $proprietaire->setUserInstance($user);
             $this->entityManager->persist($user);
             $this->entityManager->persist($proprietaire);
             $this->entityManager->flush();
         }
+
+
+        $subject ="Welcome To house renting";
+        $body="Welcome to House Renting, we hope that you enjoy your stay ". $nom . " " . $prenom ;
+        $message = (new \Swift_Message($subject))
+            ->setFrom('HouseRenting99@gmail.com')
+            ->setTo($email)
+            ->setBody($body)
+        ;
+        $mailer->send($message);
 
         return new JsonResponse(["success" => $user->getUsername(). " has been registered!"], 200);
     }
