@@ -179,6 +179,10 @@ class Maison extends Logement
         if (!$this->ratings->contains($rating)) {
             $this->ratings[] = $rating;
             $rating->setMaison($this);
+        }
+        return $this;
+    }
+    /**
      * @return Collection|Contrat[]
      */
     public function getContrats(): Collection
@@ -202,6 +206,10 @@ class Maison extends Logement
             // set the owning side to null (unless already changed)
             if ($rating->getMaison() === $this) {
                 $rating->setMaison(null);
+            }
+        }
+        return $this;
+    }
     public function removeContrat(Contrat $contrat): self
     {
         if ($this->contrats->removeElement($contrat)) {

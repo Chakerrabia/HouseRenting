@@ -36,7 +36,7 @@ class AuthenticationSuccessListener{
         $event->setData($data);
         $response->headers->setCookie(new Cookie('BEARER', $tokenJWT, (
         new DateTime())->add(new \DateInterval('PT' . 3600 . 'S'))
-            , '/', null, $this->cookieSecure));
+            , '/', null, $this->cookieSecure, false));
 
         return $response;
 

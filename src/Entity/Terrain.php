@@ -146,8 +146,9 @@ class Terrain extends Logement
             $this->ratings[] = $rating;
             $rating->setTerrain($this);
         }
+        return $this;
     }
-    
+    /**
      * @return Collection|Contrat[]
      */
     public function getContrats(): Collection
@@ -173,6 +174,7 @@ class Terrain extends Logement
                 $rating->setTerrain(null);
             }
         }
+        return $this;
     }
     public function removeContrat(Contrat $contrat): self
     {

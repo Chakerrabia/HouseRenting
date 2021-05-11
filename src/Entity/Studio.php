@@ -58,7 +58,6 @@ class Studio extends Logement
      */
     private $proprietaire;
 
-  
 
     public function __construct()
     {
@@ -67,7 +66,6 @@ class Studio extends Logement
         $this->ratings = new ArrayCollection();
         $this->contrats = new ArrayCollection();
     }
-
 
 
     public function getDescription(): ?string
@@ -179,6 +177,11 @@ class Studio extends Logement
         if (!$this->ratings->contains($rating)) {
             $this->ratings[] = $rating;
             $rating->setStudio($this);
+        }
+        return $this;
+    }
+
+    /**
      * @return Collection|Contrat[]
      */
     public function getContrats(): Collection
@@ -204,6 +207,7 @@ class Studio extends Logement
                 $rating->setStudio(null);
             }
         }
+        return $this;
     }
     public function removeContrat(Contrat $contrat): self
     {

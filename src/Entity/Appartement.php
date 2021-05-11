@@ -181,6 +181,10 @@ class Appartement extends Logement
         if (!$this->ratings->contains($rating)) {
             $this->ratings[] = $rating;
             $rating->setAppartmement($this);
+        }
+        return $this;
+    }
+    /**
      * @return Collection|Contrat[]
      */
     public function getContrats(): Collection
@@ -206,6 +210,7 @@ class Appartement extends Logement
                 $rating->setAppartmement(null);
             }
         }
+        return $this;
     }
     
     public function removeContrat(Contrat $contrat): self

@@ -164,6 +164,7 @@ class Garage extends Logement
             $this->ratings[] = $rating;
             $rating->setGarage($this);
         }
+        return $this;
     }
     /**
      * @return Collection|Contrat[]
@@ -189,6 +190,10 @@ class Garage extends Logement
             // set the owning side to null (unless already changed)
             if ($rating->getGarage() === $this) {
                 $rating->setGarage(null);
+            }
+        }
+        return $this;
+    }
     public function removeContrat(Contrat $contrat): self
     {
         if ($this->contrats->removeElement($contrat)) {
