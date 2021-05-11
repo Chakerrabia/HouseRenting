@@ -176,6 +176,7 @@ class Terrain extends Logement
         }
         return $this;
     }
+
     public function removeContrat(Contrat $contrat): self
     {
         if ($this->contrats->removeElement($contrat)) {

@@ -30,7 +30,10 @@ class Personne
      * @ORM\Column(type="string", length=255)
      */
     private $cin;
-
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $email;
     /**
      * @ORM\OneToOne(targetEntity=Adresse::class, cascade={"persist", "remove"})
      */
@@ -120,6 +123,17 @@ class Personne
     public function setUserInstance(user $userInstance): self
     {
         $this->userInstance = $userInstance;
+
+        return $this;
+    }
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }
