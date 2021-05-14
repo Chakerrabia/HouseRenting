@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\RatingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,6 +50,19 @@ class Rating
      * @ORM\ManyToOne(targetEntity=Terrain::class, inversedBy="ratings")
      */
     private $terrain;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="ratings")
+     */
+    private $client;
+
+
+
+
+    public function __construct()
+    {
+        $this->locataire = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -125,4 +140,18 @@ class Rating
 
         return $this;
     }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+
 }

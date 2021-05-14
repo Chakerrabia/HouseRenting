@@ -54,7 +54,7 @@ class Appartement extends Logement
 
     /**
      * @ORM\ManyToOne(targetEntity=Proprietaire::class, inversedBy="appartements")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $proprietaire;
 
