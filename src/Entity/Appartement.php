@@ -54,7 +54,7 @@ class Appartement extends Logement
 
     /**
      * @ORM\ManyToOne(targetEntity=Proprietaire::class, inversedBy="appartements")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $proprietaire;
 
@@ -182,8 +182,8 @@ class Appartement extends Logement
             $this->ratings[] = $rating;
             $rating->setAppartmement($this);
         }
+        return $this;
     }
-
     /**
      * @return Collection|Contrat[]
      */
@@ -210,6 +210,7 @@ class Appartement extends Logement
                 $rating->setAppartmement(null);
             }
         }
+        return $this;
     }
     
     public function removeContrat(Contrat $contrat): self

@@ -164,6 +164,7 @@ class Garage extends Logement
             $this->ratings[] = $rating;
             $rating->setGarage($this);
         }
+        return $this;
     }
     /**
      * @return Collection|Contrat[]

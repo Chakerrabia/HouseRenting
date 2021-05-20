@@ -4,7 +4,10 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\RatingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -16,11 +19,13 @@ class Rating
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $score;
 
@@ -48,6 +53,17 @@ class Rating
      * @ORM\ManyToOne(targetEntity=Terrain::class, inversedBy="ratings")
      */
     private $terrain;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="ratings")
+     * @Groups({"get-maison", "get-all-maison"})
+     */
+    private $client;
+
+    public function __construct()
+    {
+        $this->locataire = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -125,4 +141,18 @@ class Rating
 
         return $this;
     }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+
 }

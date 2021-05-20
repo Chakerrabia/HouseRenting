@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\MappedSuperclass()
@@ -12,17 +13,20 @@ class Personne
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=false)
+     * @Groups({"get-client","get-maison", "get-all-maison"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-client", "get"})
      */
     private $Nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-client", "get"})
      */
     private $prenom;
 

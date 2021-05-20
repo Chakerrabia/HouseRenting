@@ -58,7 +58,6 @@ class Studio extends Logement
      */
     private $proprietaire;
 
-  
 
     public function __construct()
     {
@@ -67,7 +66,6 @@ class Studio extends Logement
         $this->ratings = new ArrayCollection();
         $this->contrats = new ArrayCollection();
     }
-
 
 
     public function getDescription(): ?string
@@ -180,7 +178,9 @@ class Studio extends Logement
             $this->ratings[] = $rating;
             $rating->setStudio($this);
         }
+        return $this;
     }
+
     /**
      * @return Collection|Contrat[]
      */

@@ -8,53 +8,77 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={
+ *         "get"={
+ *             "normalization_context"={
+ *                "groups"={"get-maison"}
+ *             }
+ *         }
+ *     },
+ *     collectionOperations={
+ *         "get"={
+ *             "normalization_context"={
+ *                "groups"={"get-all-maison"}
+ *             }
+ *         },
+ *         "post"
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=MaisonRepository::class)
  */
 class Maison extends Logement
 {
     use TimestampTrait;
 
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $nbChambre;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $jardin;
 
     /**
      * @ORM\OneToMany(targetEntity=Photo::class, mappedBy="maison")
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $photo;
 
     /**
      * @ORM\OneToMany(targetEntity=Commentaire::class, mappedBy="maison")
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $commentaire;
 
     /**
      * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="maison")
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $ratings;
     /**
      * @ORM\OneToMany(targetEntity=Contrat::class, mappedBy="maison")
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $contrats;
 
     /**
      * @ORM\ManyToOne(targetEntity=Proprietaire::class, inversedBy="maisons")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $proprietaire;
 
@@ -180,6 +204,7 @@ class Maison extends Logement
             $this->ratings[] = $rating;
             $rating->setMaison($this);
         }
+        return $this;
     }
     /**
      * @return Collection|Contrat[]

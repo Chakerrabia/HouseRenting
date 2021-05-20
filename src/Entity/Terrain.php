@@ -146,6 +146,7 @@ class Terrain extends Logement
             $this->ratings[] = $rating;
             $rating->setTerrain($this);
         }
+        return $this;
     }
     /**
      * @return Collection|Contrat[]
