@@ -7,6 +7,7 @@ use App\Repository\RatingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -18,11 +19,13 @@ class Rating
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $score;
 
@@ -53,11 +56,9 @@ class Rating
 
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="ratings")
+     * @Groups({"get-maison", "get-all-maison"})
      */
     private $client;
-
-
-
 
     public function __construct()
     {

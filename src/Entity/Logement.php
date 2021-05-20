@@ -7,6 +7,7 @@ use App\Repository\LogementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\MappedSuperclass()
@@ -17,11 +18,13 @@ class Logement
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get-maison", "get-all-maison"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
+     * @Groups({"get-maison", "get-all-maison"})
      */
     protected $num;
 
@@ -44,8 +47,6 @@ class Logement
      * @ORM\Column(type="float", nullable=true)
      */
     protected $prixLocation;
-
-
 
     public function __construct()
     {

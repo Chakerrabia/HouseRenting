@@ -2,16 +2,36 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CommentaireRepository;
 use App\Traits\TimestampTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={
+ *         "get"={
+ *             "normalization_context"={
+ *                "groups"={"get-client"}
+ *             }
+ *         }
+ *     },
+ *     collectionOperations={
+ *         "get"={
+ *             "normalization_context"={
+ *                "groups"={"get"}
+ *             }
+ *         },
+ *         "post"
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=CommentaireRepository::class)
+ * @ApiFilter(SearchFilter::class, properties={"maison.id": "exact"})
  */
 class Commentaire
 {
@@ -20,11 +40,13 @@ class Commentaire
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get-client", "get", "get-maison", "get-all-maison"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"get-client", "get", "get-maison", "get-all-maison"})
      */
     private $comm;
 
@@ -52,6 +74,12 @@ class Commentaire
      * @ORM\ManyToOne(targetEntity=Terrain::class, inversedBy="commentaire")
      */
     private $terrain;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="commentaires")
+     * @Groups({"get-client", "get", "get-maison", "get-all-maison"})
+     */
+    private $client;
 
     public function __construct()
     {
@@ -132,6 +160,18 @@ class Commentaire
     public function setTerrain(?Terrain $terrain): self
     {
         $this->terrain = $terrain;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

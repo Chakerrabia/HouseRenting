@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -24,12 +25,19 @@ class Client extends Personne
      */
     private $ratings;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Commentaire::class, mappedBy="client")
+     * @Groups("get-client")
+     */
+    private $commentaires;
+
 
 
     public function __construct()
     {
         $this->contrats = new ArrayCollection();
         $this->ratings = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
     }
 
     /**
@@ -86,6 +94,36 @@ class Client extends Personne
             // set the owning side to null (unless already changed)
             if ($rating->getClient() === $this) {
                 $rating->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commentaire[]
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): self
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires[] = $commentaire;
+            $commentaire->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): self
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getClient() === $this) {
+                $commentaire->setClient(null);
             }
         }
 
