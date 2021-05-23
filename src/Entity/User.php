@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
+use phpDocumentor\Reflection\Types\Boolean;
+use phpDocumentor\Reflection\Types\This;
+use PhpParser\Node\Expr\Cast\Bool_;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -39,6 +42,12 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @var verified
+     * @ORM\Column(name="verified", type="boolean", options={"default":false})
+     */
+    protected $verified;
 
     public function getId(): ?int
     {
@@ -114,5 +123,20 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return verified
+     */
+    public function getVerified(): verified
+    {
+        return $this->verified;
+    }
+
+    public function setVerified(): self
+    {
+        $this->verified = true;
+
+        return $this;
     }
 }
