@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\Proprietaire;
 use App\Entity\User;
+use App\Repository\ClientRepository;
+use App\Repository\ProprietaireRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Context\Context;
@@ -83,6 +85,7 @@ class RegistrationController extends AbstractFOSRestController
         $user->setPassword(
             $this->passwordEncoder->encodePassword($user, $password)
         );
+        $user->setEmail($email);
         $user->setVerified(false);
 
         if($type == "client"){
@@ -91,7 +94,6 @@ class RegistrationController extends AbstractFOSRestController
             $client->setNom($nom);
             $client->setPrenom($prenom);
             $client->setCin($cin);
-            $client->setEmail($email);
             $client->setUserInstance($user);
             $this->entityManager->persist($user);
             $this->entityManager->persist($client);
@@ -103,7 +105,6 @@ class RegistrationController extends AbstractFOSRestController
             $proprietaire->setNom($nom);
             $proprietaire->setPrenom($prenom);
             $proprietaire->setCin($cin);
-            $proprietaire->setEmail($email);
             $proprietaire->setUserInstance($user);
             $this->entityManager->persist($user);
             $this->entityManager->persist($proprietaire);
@@ -160,15 +161,15 @@ class RegistrationController extends AbstractFOSRestController
        }
 
         // Do not get the User's Id or Email Address from the Request object
-        // TODO Write email logic
+
         try {
-            $this->helper->validateEmailConfirmation($request->getUri(), $user->getId(), "chakerrabia9@gmail.com");
+            $this->helper->validateEmailConfirmation($request->getUri(), $user->getId(), $user->getEmail());
         } catch (VerifyEmailExceptionInterface $e) {
             $this->addFlash('verify_email_error', $e->getReason());
             //return $this->redirectToRoute('app_register');
         }
 
-        $user->setVerified();
+        $user->setVerified(true);
         $this->entityManager->flush();
         $this->addFlash('success', 'Your e-mail address has been verified.');
 

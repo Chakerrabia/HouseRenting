@@ -2,6 +2,7 @@ doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
         driver: 'pdo_pgsql'
+
         charset: utf8
 
         # IMPORTANT: You MUST configure your server version,

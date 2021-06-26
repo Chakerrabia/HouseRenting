@@ -34,10 +34,7 @@ class Personne
      * @ORM\Column(type="string", length=255)
      */
     private $cin;
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $email;
+
     /**
      * @ORM\OneToOne(targetEntity=Adresse::class, cascade={"persist", "remove"})
      */

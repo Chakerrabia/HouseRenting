@@ -37,7 +37,7 @@ class AuthenticationSuccessListener{
             $tokenJWT, (
         new DateTime())->add(new \DateInterval('PT' .  $this->jwtTokenTTL . 'S'))
             , '/'
-            , null,
+            , null, 
             $this->cookieSecure
         )
         );

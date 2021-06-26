@@ -49,6 +49,11 @@ class User implements UserInterface
      */
     protected $verified;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $email;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -133,9 +138,21 @@ class User implements UserInterface
         return $this->verified;
     }
 
-    public function setVerified(): self
+    public function setVerified(Bool $verify): self
     {
-        $this->verified = true;
+        $this->verified = $verify;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }
